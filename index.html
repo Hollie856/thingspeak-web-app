@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThingSpeak Data</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .data {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>ThingSpeak Data</h1>
+    <div id="temperature" class="data"></div>
+    <div id="humidity" class="data"></div>
+    <div id="air_quality" class="data"></div>
+</div>
+
+<script>
+    // Replace with your ThingSpeak Channel ID and API Key
+    const channelID = '2799675';
+    const readAPIKey = 'YOUR_READ_API_KEY';  // Replace with your read API key
+
+    function fetchData() {
+        $.ajax({
+            url: `https://api.thingspeak.com/channels/${channelID}/feeds.json?api_key=${readAPIKey}&results=1`,
+            method: 'GET',
+            success: function(response) {
+                // Extract the most recent data from the response
+                const latestEntry = response.feeds[0];
+
+                const temperature = latestEntry.field1;  // Field 1: Temperature
+                const humidity = latestEntry.field2;     // Field 2: Humidity
+                const airQuality = latestEntry.field3;   // Field 3: Air Quality
+
+                // Display the data on the web page
+                $('#temperature').html(`Temperature: ${temperature} °C`);
+                $('#humidity').html(`Humidity: ${humidity} %`);
+                $('#air_quality').html(`Air Quality: ${airQuality}`);
+            },
+            error: function() {
+                alert("Error fetching data from ThingSpeak!");
+            }
+        });
+    }
+
+    // Fetch data every 10 seconds
+    setInterval(fetchData, 10000);
+    // Initial data fetch
+    fetchData();
+</script>
+
+</body>
+</html>
