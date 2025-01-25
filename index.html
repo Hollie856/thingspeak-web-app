@@ -55,7 +55,7 @@
         temperature: 18,  // °C
         humidity: 45,     // %
         airQuality: 140,  // Air quality index
-        soundLevel: 100    // 
+        soundLevel: 1000    // 
     };
 
     function fetchData() {
@@ -79,7 +79,7 @@
 
                 // Check if any data exceeds its threshold and display a warning
                 let warningMessage = '';
-                if (temperature > thresholds.temperature) {
+                if (temperature < thresholds.temperature) {
                     warningMessage += 'Warning: Temperature below safe limits!<br>';
                 }
                 if (humidity > thresholds.humidity) {
