@@ -6,56 +6,63 @@
     <title>Home Environment Monitoring System</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 20px auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .widget {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            transition: transform 0.2s;
-        }
-        .widget:hover {
-            transform: translateY(-5px);
-        }
-        .widget h2 {
-            font-size: 24px;
-            margin: 0;
-            color: #333;
-        }
-        .widget p {
-            font-size: 18px;
-            margin: 10px 0;
-        }
-        .widget .value {
-            font-size: 36px;
-            font-weight: bold;
-            color: #007BFF;
-        }
-        .warning {
-            grid-column: 1 / -1;
-            background-color: #ffdddd;
-            color: #d9534f;
-            padding: 15px;
-            border: 1px solid #d9534f;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 18px;
-        }
-    </style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-image: url('Background.jpg'); 
+        background-size: cover; 
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 20px auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        background-color: rgba(255, 255, 255, 0.9); 
+        padding: 20px;
+        border-radius: 12px;
+    }
+    .widget {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.2s;
+    }
+    .widget:hover {
+        transform: translateY(-5px);
+    }
+    .widget h2 {
+        font-size: 24px;
+        margin: 0;
+        color: #333;
+    }
+    .widget p {
+        font-size: 18px;
+        margin: 10px 0;
+    }
+    .widget .value {
+        font-size: 36px;
+        font-weight: bold;
+        color: #007BFF;
+    }
+    .warning {
+        grid-column: 1 / -1;
+        background-color: #ffdddd;
+        color: #d9534f;
+        padding: 15px;
+        border: 1px solid #d9534f;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 18px;
+    }
+</style>
+
 </head>
 <body>
 
