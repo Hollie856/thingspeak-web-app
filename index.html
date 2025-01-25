@@ -13,49 +13,84 @@
             background-color: #f4f4f4;
         }
         .container {
-            width: 80%;
+            width: 90%;
+            max-width: 1200px;
             margin: 20px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .widget {
             background-color: #fff;
             padding: 20px;
+            border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
             text-align: center;
+            transition: transform 0.2s;
         }
-        .data {
-            margin-top: 20px;
-            font-size: 20px;
+        .widget:hover {
+            transform: translateY(-5px);
+        }
+        .widget h2 {
+            font-size: 24px;
+            margin: 0;
+            color: #333;
+        }
+        .widget p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .widget .value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #007BFF;
         }
         .warning {
-            color: red;
+            grid-column: 1 / -1;
+            background-color: #ffdddd;
+            color: #d9534f;
+            padding: 15px;
+            border: 1px solid #d9534f;
+            border-radius: 8px;
+            text-align: center;
             font-size: 18px;
-            font-weight: bold;
-            margin-top: 20px;
         }
     </style>
 </head>
 <body>
 
+<h1 style="text-align: center; margin: 20px 0;">Home Environment Monitoring System</h1>
 <div class="container">
-    <h1>ThingSpeak Data</h1>
-    <div id="temperature" class="data"></div>
-    <div id="humidity" class="data"></div>
-    <div id="air_quality" class="data"></div>
-    <div id="sound_level" class="data"></div>
-    <div id="warning_message" class="warning"></div> <!-- Warning message div -->
+    <div id="temperature_widget" class="widget">
+        <h2>Temperature</h2>
+        <p class="value" id="temperature">-- °C</p>
+    </div>
+    <div id="humidity_widget" class="widget">
+        <h2>Humidity</h2>
+        <p class="value" id="humidity">-- %</p>
+    </div>
+    <div id="air_quality_widget" class="widget">
+        <h2>Air Quality</h2>
+        <p class="value" id="air_quality">--</p>
+    </div>
+    <div id="sound_level_widget" class="widget">
+        <h2>Sound Level</h2>
+        <p class="value" id="sound_level">-- dB</p>
+    </div>
+    <div id="warning_message" class="warning" style="display: none;">Warning messages will appear here.</div>
 </div>
 
 <script>
     // Replace with your ThingSpeak Channel ID and API Key
     const channelID = '2799675';
-    const readAPIKey = '18D1XKF4KVYW6O5A';  // Replace with your read API key
+    const readAPIKey = '18D1XKF4KVYW6O5A';
 
     // Define thresholds
     const thresholds = {
         temperature: 18,  // °C
         humidity: 45,     // %
         airQuality: 140,  // Air quality index
-        soundLevel: 1000    // 
+        soundLevel: 1000  // Sound level threshold
     };
 
     function fetchData() {
@@ -72,31 +107,31 @@
                 const soundLevel = latestEntry.field4;   // Field 4: Sound Level
 
                 // Display the data on the web page
-                $('#temperature').html(`Temperature: ${temperature} °C`);
-                $('#humidity').html(`Humidity: ${humidity} %`);
-                $('#air_quality').html(`Air Quality: ${airQuality}`);
-                $('#sound_level').html(`Sound Level: ${soundLevel} dB`);
+                $('#temperature').text(`${temperature} °C`);
+                $('#humidity').text(`${humidity} %`);
+                $('#air_quality').text(airQuality);
+                $('#sound_level').text(`${soundLevel} dB`);
 
                 // Check if any data exceeds its threshold and display a warning
                 let warningMessage = '';
                 if (temperature < thresholds.temperature) {
-                    warningMessage += 'Warning: Temperature below safe limits!<br>';
+                    warningMessage += 'Warning: Temperature below safe limits!\n';
                 }
                 if (humidity > thresholds.humidity) {
-                    warningMessage += 'Warning: Humidity is too high!<br>';
+                    warningMessage += 'Warning: Humidity is too high!\n';
                 }
                 if (airQuality > thresholds.airQuality) {
-                    warningMessage += 'Warning: Air quality is poor!<br>';
+                    warningMessage += 'Warning: Air quality is poor!\n';
                 }
                 if (soundLevel > thresholds.soundLevel) {
-                    warningMessage += 'Warning: Sound level is too high!<br>';
+                    warningMessage += 'Warning: Sound level is too high!\n';
                 }
 
                 // Show the warning message if any condition is met
                 if (warningMessage) {
-                    $('#warning_message').html(warningMessage);
+                    $('#warning_message').text(warningMessage).show();
                 } else {
-                    $('#warning_message').html('');  // Clear the warning if no condition is met
+                    $('#warning_message').hide();
                 }
             },
             error: function() {
