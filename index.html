@@ -26,6 +26,12 @@
             margin-top: 20px;
             font-size: 20px;
         }
+        .warning {
+            color: red;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -35,12 +41,22 @@
     <div id="temperature" class="data"></div>
     <div id="humidity" class="data"></div>
     <div id="air_quality" class="data"></div>
+    <div id="sound_level" class="data"></div>
+    <div id="warning_message" class="warning"></div> <!-- Warning message div -->
 </div>
 
 <script>
     // Replace with your ThingSpeak Channel ID and API Key
     const channelID = '2799675';
     const readAPIKey = '18D1XKF4KVYW6O5A';  // Replace with your read API key
+
+    // Define thresholds
+    const thresholds = {
+        temperature: 18,  // °C
+        humidity: 45,     // %
+        airQuality: 140,  // Air quality index
+        soundLevel: 100    // 
+    };
 
     function fetchData() {
         $.ajax({
@@ -53,11 +69,35 @@
                 const temperature = latestEntry.field1;  // Field 1: Temperature
                 const humidity = latestEntry.field2;     // Field 2: Humidity
                 const airQuality = latestEntry.field3;   // Field 3: Air Quality
+                const soundLevel = latestEntry.field4;   // Field 4: Sound Level
 
                 // Display the data on the web page
                 $('#temperature').html(`Temperature: ${temperature} °C`);
                 $('#humidity').html(`Humidity: ${humidity} %`);
                 $('#air_quality').html(`Air Quality: ${airQuality}`);
+                $('#sound_level').html(`Sound Level: ${soundLevel} dB`);
+
+                // Check if any data exceeds its threshold and display a warning
+                let warningMessage = '';
+                if (temperature > thresholds.temperature) {
+                    warningMessage += 'Warning: Temperature below safe limits!<br>';
+                }
+                if (humidity > thresholds.humidity) {
+                    warningMessage += 'Warning: Humidity is too high!<br>';
+                }
+                if (airQuality > thresholds.airQuality) {
+                    warningMessage += 'Warning: Air quality is poor!<br>';
+                }
+                if (soundLevel > thresholds.soundLevel) {
+                    warningMessage += 'Warning: Sound level is too high!<br>';
+                }
+
+                // Show the warning message if any condition is met
+                if (warningMessage) {
+                    $('#warning_message').html(warningMessage);
+                } else {
+                    $('#warning_message').html('');  // Clear the warning if no condition is met
+                }
             },
             error: function() {
                 alert("Error fetching data from ThingSpeak!");
